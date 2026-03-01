@@ -1,51 +1,76 @@
 # Aryan Rajput
 
-**SDE & AI Engineer** — I build production-grade AI systems end-to-end, from low-level inference infrastructure to the interfaces people actually use.
+**AI Engineer · Rust inference · RAG pipelines · CPU-constrained LLM serving**
 
-My current focus is on systems where performance is non-negotiable: LLM serving, retrieval-augmented generation, and the full-stack glue that ties them into coherent products. I care about the complete picture — correctness, measured performance, and the user experience of working with AI in real time.
-
----
-
-## What I'm Building
-
-### Nexus Platform
-A multi-service AI workspace combining three purpose-built components into a single real-time collaborative environment.
-
-The compute core is written in Rust — chosen specifically to eliminate GC pauses and unpredictable tail latency inherent to Python-based inference servers. It uses a pre-allocated memory pool to prevent allocation thrashing under concurrent load, a lock-free bounded job queue for admission control, and an LRU model registry for stable memory under model-churn workloads. Scheduling overhead is consistently sub-100µs regardless of model compute time.
-
-The retrieval layer is a Python service handling semantic search via HNSW vector indexing, returning relevant document context at P95 under 80ms. The frontend is a Next.js 14 application that orchestrates both services in a sequential pipeline — retrieval context is assembled and passed to the inference engine, with token output streamed back to a rich-text editor surface in real time.
-
-The system was designed around a clear principle: the frontend owns no intelligence. All heavy computation is delegated to purpose-built backends, keeping each layer independently optimizable and the total end-to-end latency budget predictable.
-
-**Core technologies:** Rust · Axum · ONNX Runtime · Python · HNSW · Next.js 14 · TypeScript · Supabase · Zustand · Prometheus
+I build the infrastructure layer of AI systems — not the wrappers around APIs, but the engines underneath them. My current focus is local LLM serving, retrieval-augmented generation, and making inference work correctly under real resource constraints.
 
 ---
 
-## Technical Range
+## What I've Built
 
-My work spans three areas that I treat as deeply connected rather than separate disciplines.
+### [Nexus](https://github.com/aryan105825/nexus-workspace) — Three-service AI workspace
 
-**Systems & Infrastructure** — Rust, concurrent scheduling, memory management, lock-free data structures, ONNX model serving, Prometheus observability, structured tracing, CI/CD with strict quality gates.
+> **Constraint:** 8 GB RAM · CPU only · No GPU · No cloud inference
 
-**AI & Machine Learning** — RAG pipeline design, semantic embedding, NER, LLM application development, deep learning (CNNs, RNNs, Transformers), GANs, NLP, computer vision, TensorFlow, PyTorch.
+A production-designed system built to answer one question: how do you run a complete AI pipeline locally when memory is the hard limit?
 
-**Full-Stack Engineering** — React, Next.js, Node.js, TypeScript, REST API design, real-time interfaces, edge auth, scalable system architecture.
+**Rust inference engine** (`infer-engine`)
+- Pre-allocated 100 MB memory pool — 25 slots × 4 MB, `Drop`-based reclamation, leaks structurally impossible
+- Bounded job queue (depth 20) with `try_send` — overload rejected at the boundary, never absorbed
+- LRU model registry (max 5) — deterministic memory under model-churn workloads
+- Scheduler overhead: **~81 µs P50** regardless of model compute time
+- Zero GC pauses. Zero allocation at request time.
+
+**Python RAG pipeline** (`rag-main`)
+- Phi-3.5-mini-instruct Q4_K_M running locally at **~115 tok/s**, TTFT **<100 ms**
+- Embedding delegated to Rust over loopback HTTP — saves **~500 MB** baseline RAM vs loading PyTorch in-process
+- Guardrails run synchronously before `StreamingResponse` is returned — HTTP error semantics preserved
+- Vector retrieval: **85 ms P50**, 186 ms P95 via Supabase pgvector
+
+**Next.js 14 frontend** (`nexus-frontend`)
+- The frontend owns no intelligence — it orchestrates two purpose-built backends
+- SSE delivered via Route Handler bypass — Next.js rewrites buffer response bodies, causing ECONNRESET; Route Handler pipes ReadableStream directly
+- AbortController lifecycle wired to three abort triggers: query change, palette close, stop button
+- Live knowledge graph via Supabase Realtime subscription on note saves
+
+Every failure mode returns the correct HTTP status. The system rejects work rather than degrading silently.
+
+→ **[Architecture decisions documented as ADRs](https://github.com/aryan105825/nexus-workspace/tree/main/docs/adr)**  
+→ **[Portfolio & benchmarks](https://your-portfolio-url.com)**
 
 ---
 
-## Education & Certifications
+## Stack
 
-**B.Tech, Computer Science** — Noida Institute of Engineering & Technology
+```
+Systems    Rust · Axum · crossbeam · tract-onnx · tower · Prometheus
+AI/ML      llama.cpp · Phi-3.5-mini · sentence-transformers · ONNX · PyTorch
+Backend    Python · FastAPI · Node.js · Supabase · pgvector · Pydantic
+Frontend   Next.js 14 · TypeScript · React · Tiptap · ReactFlow · Zustand · D3
+Infra      k6 · Criterion · Prometheus · Vercel · Git
+```
 
-**DeepLearning.AI Specializations** — Deep Learning · Natural Language Processing · GANs · TensorFlow: Advanced Techniques · TensorFlow: Data and Deployment · Generative AI · Mathematics for Machine Learning and Data Science
+---
 
-**Other** — CS50x (Harvard) · Structuring Machine Learning Projects · LangChain & LLM Application Development · Full-Stack Engineering
+## Writing
+
+**[Why prompt engineering couldn't fix my RAG hallucination problem](https://your-article-url)** *(coming soon)*  
+TinyLlama 1.1B consistently fabricated relationships between unrelated entities in multi-document context windows. Every prompt mitigation failed. Here's why model scale was the only fix, and how I diagnosed it.
+
+---
+
+## Background
+
+B.Tech Computer Science — NIET  
+DeepLearning.AI: Deep Learning · NLP · GANs · TensorFlow · Generative AI · Mathematics for ML  
+CS50x (Harvard)
 
 ---
 
 ## Currently
 
-- Building and refining the Nexus platform
-- Open to remote engineering roles in AI infrastructure, LLM systems, or full-stack AI product development
+- Actively building on Nexus — batching, speculative decoding, extended observability
+- Open to **remote AI infrastructure and LLM systems roles** — US and EU firms
+- IST (UTC+5:30) — 4–6 hr overlap with EU, available late IST for US East Coast
 
-📬 aryanrajput1058@gmail.com · [LinkedIn](https://www.linkedin.com/in/aryanrajput1058)
+📬 aryanrajput@[yourdomain].com · [LinkedIn](https://linkedin.com/in/aryan-rajput1058) · 
