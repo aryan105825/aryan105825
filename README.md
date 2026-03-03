@@ -73,4 +73,4 @@ CS50x (Harvard)
 - Open to **remote AI infrastructure and LLM systems roles** — US and EU firms
 - IST (UTC+5:30) — 4–6 hr overlap with EU, available late IST for US East Coast
 
-📬 aryanrajput@[yourdomain].com · [LinkedIn](https://linkedin.com/in/aryan-rajput1058) · 
+📬 aryan105825@gmail.com · [LinkedIn](https://linkedin.com/in/aryan-rajput1058) · 
