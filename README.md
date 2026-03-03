@@ -36,7 +36,7 @@ A production-designed system built to answer one question: how do you run a comp
 Every failure mode returns the correct HTTP status. The system rejects work rather than degrading silently.
 
 → **[Architecture decisions documented as ADRs](https://github.com/aryan105825/nexus-workspace/tree/main/docs/adr)**  
-→ **[Portfolio & benchmarks](https://your-portfolio-url.com)**
+→ **[Portfolio & benchmarks](https://frontend-port-one.vercel.app)**
 
 ---
 
