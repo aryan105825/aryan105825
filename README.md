@@ -34,8 +34,7 @@ A production-designed system built to answer one question: how do you run a comp
 - Live knowledge graph via Supabase Realtime subscription on note saves
 
 Every failure mode returns the correct HTTP status. The system rejects work rather than degrading silently.
-
-→ **[Architecture decisions documented as ADRs](https://github.com/aryan105825/nexus-workspace/tree/main/docs/adr)**  
+  
 → **[Portfolio & benchmarks](https://frontend-port-one.vercel.app)**
 
 ---
@@ -54,7 +53,7 @@ Infra      k6 · Criterion · Prometheus · Vercel · Git
 
 ## Writing
 
-**[Why prompt engineering couldn't fix my RAG hallucination problem](https://your-article-url)** *(coming soon)*  
+
 TinyLlama 1.1B consistently fabricated relationships between unrelated entities in multi-document context windows. Every prompt mitigation failed. Here's why model scale was the only fix, and how I diagnosed it.
 
 ---
