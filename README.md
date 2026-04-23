@@ -48,7 +48,7 @@ An open-source event-driven pipeline that analyzes user sessions by grounding Vi
 
 ---
 
-### [DevSecOps Autopilot](https://github.com/aryan105825/35222941) — Four-agent security pipeline on GitLab Duo
+### [DevSecOps Autopilot] (https://gitlab.com/gitlab-ai-hackathon/participants/35222941) — Four-agent security pipeline on GitLab Duo
 > **Trigger:** Mention or assign to any Merge Request. The pipeline does the rest.
 
 A multi-agent system built on the GitLab Duo Agent Platform. One MR mention triggers a four-stage sequential pipeline — scans code, maps to security standards, posts a structured review with fix snippets — zero human involvement.
